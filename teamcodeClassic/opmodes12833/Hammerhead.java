@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.PhoneBots.teamcodeClassic.opmodes12833;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -66,7 +66,7 @@ public class Hammerhead extends LinearOpMode {
             rightFront.setPower(right);
             rightBack.setPower(right);
 
-            if(gamepadCurrent.left_bumper) grabber.setPosition(0);
+            if(gamepadCurrent.left_bumper) grabber.setPosition(.25);
             if(gamepadCurrent.right_bumper) grabber.setPosition(1);
             if(gamepadCurrent.left_trigger > 0) arm.setPosition(1);
             if(gamepadCurrent.right_trigger > 0) arm.setPosition(0);
