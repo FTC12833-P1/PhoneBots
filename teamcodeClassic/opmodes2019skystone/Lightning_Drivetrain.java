@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes2019skystone;
+package org.firstinspires.ftc.PhoneBots.teamcodeClassic.opmodes2019skystone;
 import android.view.Display;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
