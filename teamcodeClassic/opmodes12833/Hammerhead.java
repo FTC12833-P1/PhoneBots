@@ -66,10 +66,10 @@ public class Hammerhead extends LinearOpMode {
             rightFront.setPower(right);
             rightBack.setPower(right);
 
-            if(gamepadCurrent.left_bumper) grabber.setPosition(.25);
+            if(gamepadCurrent.left_bumper) grabber.setPosition(.45);
             if(gamepadCurrent.right_bumper) grabber.setPosition(1);
             if(gamepadCurrent.left_trigger > 0) arm.setPosition(1);
-            if(gamepadCurrent.right_trigger > 0) arm.setPosition(0);
+            if(gamepadCurrent.right_trigger > 0) arm.setPosition(.2);
 
             telemetry.update();
         }
@@ -88,6 +88,6 @@ public class Hammerhead extends LinearOpMode {
         grabber = hardwareMap.get(Servo.class, "grabber");
 
         arm.setPosition(1);
-        grabber.setPosition(0);
+        grabber.setPosition(.45);
     }
 }
