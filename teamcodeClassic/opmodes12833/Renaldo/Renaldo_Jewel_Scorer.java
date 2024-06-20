@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes12833;
+package org.firstinspires.ftc.PhoneBots.teamcodeClassic.opmodes12833.Renaldo;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;

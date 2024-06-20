@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes12833;
+package org.firstinspires.ftc.PhoneBots.teamcodeClassic.opmodes12833.misc;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
