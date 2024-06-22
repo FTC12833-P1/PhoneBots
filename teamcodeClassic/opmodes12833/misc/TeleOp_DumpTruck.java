@@ -38,10 +38,10 @@ public class TeleOp_DumpTruck extends LinearOpMode {
             rightDrive.setPower(rightPower);
 
             if(gamepad1.left_bumper){
-                dumper.setPosition(.6);
+                dumper.setPosition(.47);
             }
             if(gamepad1.right_bumper){
-                dumper.setPosition(1);
+                dumper.setPosition(.8);
             }
         }
     }
@@ -52,6 +52,6 @@ public class TeleOp_DumpTruck extends LinearOpMode {
         leftDrive.setDirection(DcMotorEx.Direction.REVERSE);
 
         dumper = hardwareMap.get(Servo.class, "dumper");
-        dumper.setPosition(1);
+        dumper.setPosition(.8);
     }
 }
