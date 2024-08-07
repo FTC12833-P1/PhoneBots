@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -29,7 +30,7 @@ public class ClawMachine extends LinearOpMode {
     private TouchSensor rightLimit = null;
 
     //    public DistanceSensor clawLimit = null;
-    private DigitalChannel clawLimit = null;
+    private ColorSensor clawLimit = null;
 
     private CRServo clawRappel = null;
     private Servo clawPincers = null;
@@ -39,10 +40,7 @@ public class ClawMachine extends LinearOpMode {
 
     private final double MAX_LEFT_DRIVE_POWER = 0.5;
     private final double MAX_RIGHT_DRIVE_POWER = 0.5;
-    private final double MAX_X_POSITIONER_POWER = 0.5;
-    private final double MAX_Y_POSITIONER_POWER = 0.5;
 
-    private final double PINCERS_START_POS = 0;
     private final double PINCERS_POS_OPEN = 1;
     private final double PINCERS_POS_CLOSED = 0.175;
 
@@ -68,6 +66,13 @@ public class ClawMachine extends LinearOpMode {
             driveWithSticks();
             positionClaw();
             deployClaw();
+//            telemetry.addData("leftLimit", leftLimit.isPressed());
+//            telemetry.addData("rightLimit", rightLimit.isPressed());
+//            telemetry.addData("clawLimitRed", clawLimit.red());
+//            telemetry.addData("clawLimitGreen", clawLimit.green());
+//            telemetry.addData("clawLimitBlue", clawLimit.blue());
+            telemetry.addData("yAxisMotorTicks", yAxisPositioner.getCurrentPosition());
+            telemetry.update();
 
             try {
                 previousGamepad1.copy(currentGamepad1);
@@ -79,20 +84,14 @@ public class ClawMachine extends LinearOpMode {
             } catch (RobotCoreException e) {
                 e.printStackTrace();
             }
-
-            //telemetry.addData("colorLimit distance", clawLimit.getDistance(DistanceUnit.INCH));
-            //telemetry.update();
         }
     }
 
     public void driveWithSticks() {
         //drive forward and backward
-        if (gamepad1.left_stick_y > 0.1) {
-            leftDriveMotor.setPower(MAX_LEFT_DRIVE_POWER * gamepad1.left_stick_y);
-            rightDriveMotor.setPower(MAX_RIGHT_DRIVE_POWER * gamepad1.left_stick_y);
-        } else if (gamepad1.left_stick_y < -0.1) {
-            leftDriveMotor.setPower(-(MAX_LEFT_DRIVE_POWER * -gamepad1.left_stick_y));
-            rightDriveMotor.setPower(-(MAX_RIGHT_DRIVE_POWER * -gamepad1.left_stick_y));
+        if (Math.abs(gamepad1.left_stick_y) > 0.1) {
+            leftDriveMotor.setPower(-(MAX_LEFT_DRIVE_POWER * gamepad1.left_stick_y));
+            rightDriveMotor.setPower(-(MAX_RIGHT_DRIVE_POWER * gamepad1.left_stick_y));
         } else {
             leftDriveMotor.setPower(0);
             rightDriveMotor.setPower(0);
@@ -112,21 +111,26 @@ public class ClawMachine extends LinearOpMode {
             xAxisPositioner.setPower(0);
         }
 
-        if (gamepad1.dpad_up) {
+        if (gamepad1.dpad_up && yAxisPositioner.getCurrentPosition() > -525) {
             yAxisPositioner.setPower(yAxisPosPower);
-        } else if (gamepad1.dpad_down) {
+        } else if (gamepad1.dpad_down && yAxisPositioner.getCurrentPosition() < -25) {
             yAxisPositioner.setPower(-yAxisPosPower);
         } else {
             yAxisPositioner.setPower(0);
         }
+
+        //all the way to front (ticks): -538
+        //all the way to back (ticks): 0
+        //front limit: -515
+        //back limit: -25
     }
 
     public void deployClaw() {
         //move claw up and down
-        if (gamepad1.left_trigger > 0.1) {
+        if (gamepad1.left_trigger > 0.1) { //down
+            clawRappel.setPower(clawRappelPower);
+        } else if (gamepad1.right_trigger > 0.1 && clawLimit.red() < 500) { //up
             clawRappel.setPower(-clawRappelPower);
-        } else if (gamepad1.right_trigger > 0.1 && !clawLimit.getState()) { // && clawLimit.getDistance(DistanceUnit.INCH) > 1.5) {
-            clawRappel.setPower((clawRappelPower));
         } else {
             clawRappel.setPower(0);
         }
@@ -165,7 +169,7 @@ public class ClawMachine extends LinearOpMode {
         rightLimit = hardwareMap.get(TouchSensor.class, "rightLimit");
 
 //        clawLimit = hardwareMap.get(DistanceSensor.class, "clawLimit");
-        clawLimit = hardwareMap.get(DigitalChannel.class, "clawLimit");
+        clawLimit = hardwareMap.get(ColorSensor.class, "clawLimit");
 
         clawRappel = hardwareMap.get(CRServo.class, "clawRappel");
         clawPincers = hardwareMap.get(Servo.class, "clawPincers");
