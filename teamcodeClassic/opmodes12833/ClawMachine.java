@@ -54,12 +54,49 @@ public class ClawMachine extends LinearOpMode {
 
     private boolean pincersHandled = false;
 
+    private int diffSelectXCount = 0;
+    private boolean xStateChanged = false;
+    private String selectedDifficulty = null;
+
     @Override
     public void runOpMode() {
+        telemetry.addData("Status", "Initializing... Please Wait");
+        telemetry.update();
         innit();
         telemetry.addData("Status", "Initialized");
+        telemetry.addData("Select Difficulty", "");
         telemetry.update();
-        waitForStart();
+        while (!isStarted()) {
+            telemetry.addData("X count", diffSelectXCount);
+            telemetry.addData("xStateChanged", xStateChanged);
+            telemetry.update();
+
+            if (gamepad1.x) {
+                xStateChanged = true;
+            }
+
+            if (gamepad1.x && xStateChanged) {
+                diffSelectXCount += 1;
+                xStateChanged = false;
+            }
+
+            if (diffSelectXCount % 3 == 0) {
+                telemetry.addData("Selected Difficulty", "Easy - no time limit, can move " +
+                        "claw in any direction any number of times");
+                telemetry.update();
+                selectedDifficulty = "easy";
+            } else if (diffSelectXCount % 3 == 1) {
+                telemetry.addData("Selected Difficulty:", "Medium - 30 second time limit, " +
+                        "can move claw in any direction any number of times");
+                telemetry.update();
+                selectedDifficulty = "medium";
+            } else {
+                telemetry.addData("Selected Difficulty", "Hard - 30 second time limit, can " +
+                        "only move claw in one direction each way, press A to auto-grab");
+                telemetry.update();
+                selectedDifficulty = "hard";
+            }
+        }
         runtime.reset();
 
         while (opModeIsActive()) {
