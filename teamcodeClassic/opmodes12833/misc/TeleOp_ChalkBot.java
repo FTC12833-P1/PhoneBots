@@ -18,7 +18,7 @@ public class TeleOp_ChalkBot extends LinearOpMode {
 
     double leftpower;
     double rightPower;
-    final double MAX_POWER = 0.4;
+    final double MAX_POWER = 0.8;
     final double MAX_SLOW_POWER = 0.3;
     private Gamepad previousGamepad1 = new Gamepad();
     private Gamepad currentGamepad1 = new Gamepad();

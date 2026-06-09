@@ -18,8 +18,8 @@ public class Hammerhead extends LinearOpMode {
     private Servo arm = null;
     private Servo grabber = null;
 
-    private final double NORMAL_SPEED = .5;
-    private final double SLOW_SPEED = .17;
+    private final double NORMAL_SPEED = 1;
+    private final double SLOW_SPEED = .5;
 
     private boolean slowMode = false;
     private double driveSpeedFactor = NORMAL_SPEED;
